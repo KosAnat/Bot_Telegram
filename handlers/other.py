@@ -5,6 +5,9 @@ import json, string
 
 
 async def swearing(message: types.Message):
+    '''Данная функция удаляет мат, который схож с теми словами ,которые находятся в файле "cenz.json"
+    и делает замечание
+    '''
     word = {i.lower().translate(str.maketrans('', '', string.punctuation)) for i in
             message.text.split(' ')}.intersection(
         set(json.load(open('cenz.json'))))
@@ -14,3 +17,5 @@ async def swearing(message: types.Message):
 
 def register_handers_other(dp: Dispatcher):
     dp.register_message_handler(swearing)
+
+

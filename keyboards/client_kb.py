@@ -1,11 +1,13 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
-b1 = KeyboardButton('/start')
 b2 = KeyboardButton('/Найти_игру')
-b3 = KeyboardButton('/Информация_о_игре')
+b3 = KeyboardButton('/custom')
+b4 = KeyboardButton('/high')
+b5 = KeyboardButton('/low')
+b6 = KeyboardButton('/range')
+b7 = KeyboardButton('/history')
+b8 = KeyboardButton('/help')
+kb_client = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard = True)
 
-
-kb_client = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard = True)#Заменяет клавиатуру
-
-kb_client.add(b1).insert(b2).insert(b3) # Добавляет кнопки
+kb_client.insert(b2).insert(b3).insert(b4).insert(b5).add(b6).insert(b7).insert(b8)
 
