@@ -1,13 +1,8 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
 
-b2 = KeyboardButton('/Найти_игру')
-b3 = KeyboardButton('/custom')
-b4 = KeyboardButton('/high')
-b5 = KeyboardButton('/low')
-b6 = KeyboardButton('/range')
-b7 = KeyboardButton('/history')
-b8 = KeyboardButton('/help')
-kb_client = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard = True)
+key_board = ["/Найти_игру", "/custom", "/high", "/low", "/range", "/history", "/help"]
 
-kb_client.insert(b2).insert(b3).insert(b4).insert(b5).add(b6).insert(b7).insert(b8)
+kb_client = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
 
+for i in key_board:
+    kb_client.insert(i)

@@ -1,4 +1,5 @@
 import requests
+
 from Game_API import home_API
 
 
@@ -18,13 +19,13 @@ def search_game(query: str, flag=False) -> str:
             games = response.json()["results"]
             for game in games:
                 if flag == False:
-                    yield '{name}'.format(name=game["name"])
+                    yield "{name}".format(name=game["name"])
                 else:
                     yield game["id"]
         else:
             yield "Данной игры не существует."
     except ValueError:
-        yield 'Ввод некорректен, попробуйте еще раз'
+        yield "Ввод некорректен, попробуйте еще раз"
 
 
 def all_about_game(name: str) -> str:
@@ -40,19 +41,25 @@ def all_about_game(name: str) -> str:
 
         if response.status_code == 200:
             games = response.json()
-            platforms_list = [i['platform']['name'] for i in games["platforms"]]
-            platforms = ''
+            platforms_list = [i["platform"]["name"] for i in games["platforms"]]
+            platforms = ""
 
             for i in platforms_list:
-                platforms += i + '. '
+                platforms += i + ". "
 
-            return 'Название: {name}\n\nДата выпуска: {released}\n\nРейтинг по версии "metacritic": {metacritic}\n\nПримерное время прохождения игры: ' \
-                   '{playtime} часа\n\nИгровые платформы: {platforms}\n\nОфициальный сайт игры: {website}'.format(
-                name=games["name"],
-                website=games["website"], playtime=games["playtime"],
-                released=games["released"], platforms=platforms, metacritic=games["metacritic"])
+            return (
+                'Название: {name}\n\nДата выпуска: {released}\n\nРейтинг по версии "metacritic": {metacritic}\n\nПримерное время прохождения игры: '
+                "{playtime} часа\n\nИгровые платформы: {platforms}\n\nОфициальный сайт игры: {website}".format(
+                    name=games["name"],
+                    website=games["website"],
+                    playtime=games["playtime"],
+                    released=games["released"],
+                    platforms=platforms,
+                    metacritic=games["metacritic"],
+                )
+            )
     except ValueError:
-        return 'Ввод некорректен, попробуйте еще раз'
+        return "Ввод некорректен, попробуйте еще раз"
 
 
 def low_high(query: str, count: str, flag=True) -> str:
@@ -68,23 +75,29 @@ def low_high(query: str, count: str, flag=True) -> str:
         if 10 <= int(query) <= 100 and int(count) > 0:
             if flag == True:
                 ordering = "metacritic"
-                query += ',100'
+                query += ",100"
             else:
                 ordering = "-metacritic"
-                query = '10,' + query
+                query = "10," + query
 
-            params = {"metacritic": query, "page": 1, "page_size": int(count), "ordering": ordering}
+            params = {
+                "metacritic": query,
+                "page": 1,
+                "page_size": int(count),
+                "ordering": ordering,
+            }
             response = home_API.home_api(params=params)
 
             if response.status_code == 200:
                 games = response.json()["results"]
                 for game in games:
-                    yield 'Название: {name} - Рейтинг: {metacritic}'.format(name=game["name"],
-                                                                            metacritic=game["metacritic"])
+                    yield "Название: {name} - Рейтинг: {metacritic}".format(
+                        name=game["name"], metacritic=game["metacritic"]
+                    )
         else:
-            yield 'Ввод некорректен, попробуйте еще раз'
+            yield "Ввод некорректен, попробуйте еще раз"
     except ValueError:
-        yield 'Ввод некорректен, попробуйте еще раз'
+        yield "Ввод некорректен, попробуйте еще раз"
 
 
 def range_game(query: str, count: str) -> str:
@@ -97,15 +110,21 @@ def range_game(query: str, count: str) -> str:
     """
     try:
         if int(count) > 0:
-            params = {"metacritic": query, "page": 1, "page_size": int(count), "ordering": "metacritic"}
+            params = {
+                "metacritic": query,
+                "page": 1,
+                "page_size": int(count),
+                "ordering": "metacritic",
+            }
             response = home_API.home_api(params=params)
 
             if response.status_code == 200:
                 games = response.json()["results"]
                 for game in games:
-                    yield 'Название: {name} - Рейтинг: {metacritic}'.format(name=game["name"],
-                                                                            metacritic=game["metacritic"])
+                    yield "Название: {name} - Рейтинг: {metacritic}".format(
+                        name=game["name"], metacritic=game["metacritic"]
+                    )
         else:
-            yield 'Ввод некорректен, попробуйте еще раз'
+            yield "Ввод некорректен, попробуйте еще раз"
     except ValueError:
-        yield 'Ввод некорректен, попробуйте еще раз'
+        yield "Ввод некорректен, попробуйте еще раз"
