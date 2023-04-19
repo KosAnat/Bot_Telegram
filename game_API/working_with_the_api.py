@@ -1,6 +1,6 @@
 import requests
 
-from Game_API import home_API
+from game_API import home_API
 
 
 def search_game(query: str, flag=False) -> str:

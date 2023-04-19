@@ -7,7 +7,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 
 from create_bot import bot, dp
 from data_base import sqlite_db
-from Game_API import working_with_the_api
+from game_API import working_with_the_api
 from keyboards import kb_client
 
 
