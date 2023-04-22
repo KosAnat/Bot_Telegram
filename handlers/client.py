@@ -5,6 +5,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 from aiogram.dispatcher.filters.state import State, StatesGroup
 
+
 from create_bot import bot, dp
 from data_base import sqlite_db
 from game_API import working_with_the_api
@@ -42,7 +43,7 @@ class FSM_all_game(StatesGroup):
     range_game_1 = State()
     range_game_2 = State()
 
-
+@dp.message_handler(lambda message: message.text.startswith("Find_a_game"))
 async def all_game(message: types.Message):
     """
     Данная функция заправшивает у пользователя название игры или часть названия игры и вводит бота в машину состояний.
@@ -65,7 +66,7 @@ async def search_and_send_game(message: types.Message, state: FSMContext):
 
     await state.finish()
 
-
+@dp.message_handler(lambda message: message.text.startswith("custom"))
 async def full_game(message: types.Message):
     """Запрашивает у пользователя название игры, чтобы выловить сообщение и вывести более подробную информацию и
     вводит бота в машину состояний"""
@@ -84,7 +85,7 @@ async def info_game(message: types.Message, state: FSMContext):
 
     await state.finish()
 
-
+@dp.message_handler(lambda message: message.text.startswith("high"))
 async def high(message: types.Message):
     """Данная функция запрашивает у пользователя рейтинг, от которых необходимо начать поиск, а также вводит бота в машину состояний"""
     sqlite_db.add_history_record(message.from_user.id, message.text)
@@ -118,7 +119,7 @@ async def high_count(message: types.Message, state: FSMContext):
     await message.reply("Поиск завершен")
     await state.finish()
 
-
+@dp.message_handler(lambda message: message.text.startswith("low"))
 async def low(message: types.Message):
     """Данная функция запрашивает у пользователя рейтинг, от которых необходимо начать поиск, а также вводит бота
     в машину состояний"""
@@ -154,7 +155,7 @@ async def low_count(message: types.Message, state: FSMContext):
     await message.reply("Поиск завершен")
     await state.finish()
 
-
+@dp.message_handler(lambda message: message.text.startswith("range"))
 async def range(message: types.Message):
     """Данная функция запрашивает у пользователя диапазон рейтинга, а также вводит бота в машину состояний"""
     sqlite_db.add_history_record(message.from_user.id, message.text)
@@ -188,7 +189,7 @@ async def range_game_count(message: types.Message, state: FSMContext):
     await message.reply("Поиск завершен")
     await state.finish()
 
-
+@dp.message_handler(lambda message: message.text.startswith("history"))
 async def history_command_handler(message: types.Message):
     """Данная функция"""
     conn = sqlite3.connect("history.db")
@@ -208,27 +209,27 @@ async def history_command_handler(message: types.Message):
         responce = "Вы еще не сделали ни одного запроса"
     await message.answer(responce)
 
-
+@dp.message_handler(lambda message: message.text.startswith("help"))
 async def helper(message: types.Message):
     sqlite_db.add_history_record(message.from_user.id, message.text)
     await message.answer(
-        "Команда <b>/Найти_игру</b>:"
+        "Команда <b>Find_a_game</b>:"
         "\nДанная команда запрашивает у вас название игры или ее часть, после чего выдает "
         "список из игр с похожим названием, которое должно вам подойти!\n\n"
-        "Команда <b>/custom</b>:\n"
+        "Команда <b>custom</b>:\n"
         "Данная команда запрашивает у вас название игры, после чего выводит более подробную информацию\n\n"
-        "Команда <b>/high</b>:\n"
+        "Команда <b>high</b>:\n"
         'Данная команда проводит поиск по рейтингу "metacritic" в большую сторону. Например: вы вводите рейтинг '
         "40, вам выдаются игры с рейтингом 40 и выше\n\n"
-        "Команда <b>/low</b>:\n"
+        "Команда <b>low</b>:\n"
         'Данная команда проводит поиск по рейтингу "metacritic" в меньшую сторону. Например: вы вводите рейтинг '
         "40, вам выдаются игры с рейтингом 40 и ниже\n\n"
-        "Команда <b>/range</b>:\n"
+        "Команда <b>range</b>:\n"
         'Данная команда проводит поиск по рейтингу "metacritic" в диапазоне. Например: вы вводите рейтинг '
         "40,60(через запятую), вам выдаются игры с рейтингом от 40 до 60 \n\n"
-        "Команда <b>/history</b>:\n"
+        "Команда <b>history</b>:\n"
         "Данная команда выдает последние 10 запросов, которые вы вводили(если такие имеются) \n\n"
-        "Команда <b>/help</b>:\n"
+        "Команда <b>help</b>:\n"
         "Данная команда выдает информацию о всех командах",
         parse_mode="html",
     )
@@ -241,14 +242,6 @@ async def the_сomands_does_not_exist(message: types.Message):
 def register_handers_client(dp: Dispatcher):
     commands_with_none = [
         (["start"], send_welcome),
-        (["Найти_игру"], all_game),
-        (["custom"], full_game),
-        (["high"], high),
-        (["low"], low),
-        (["range"], range),
-        (["history"], history_command_handler),
-        (["help"], helper),
-        (None, the_сomands_does_not_exist),
     ]
 
     commands_2 = [
@@ -263,7 +256,7 @@ def register_handers_client(dp: Dispatcher):
     ]
 
     for i in commands_with_none:
-        dp.register_message_handler(i[1], commands=i[0], state=None)
+        dp.register_message_handler(i[1], commands = i[0], state=None)
 
     for i in commands_2:
         dp.register_message_handler(i[0], state=i[1])
